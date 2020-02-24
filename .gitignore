@@ -1,4 +1,5 @@
 logs/
+i18n-repositories/
 npm-debug.log
 yarn-error.log
 node_modules/
@@ -10,5 +11,4 @@ run/
 .DS_Store
 *.sw*
 *.un~
-typings/
-.nyc_output/
+
