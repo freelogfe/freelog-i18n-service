@@ -2,10 +2,10 @@
 // Do not modify this file!!!!!!!!!
 
 import 'egg';
-import ExportI18nManagement = require('../../../app/controller/i18n-management');
+import ExportHome = require('../../../app/controller/home');
 
 declare module 'egg' {
   interface IController {
-    i18nManagement: ExportI18nManagement;
+    home: ExportHome;
   }
 }

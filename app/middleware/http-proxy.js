@@ -1,11 +1,11 @@
 'use strict'
 
-const createProxyMiddleware = require('http-proxy-middleware').createProxyMiddleware
+const httpProxy = require('http-proxy-middleware')
 const k2c = require('koa2-connect')
 const helper = require('../extend/helper')
 
 module.exports = options => {
-  const proxyHandler = k2c(createProxyMiddleware({
+  const proxyHandler = k2c(httpProxy({
     target: options.target,
     changeOrigin: true,
     secure: false,

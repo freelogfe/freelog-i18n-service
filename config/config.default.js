@@ -1,5 +1,5 @@
 'use strict'
-const pathToRegexp = require('path-to-regexp').pathToRegexp
+const pathToRegexp = require('path-to-regexp')
 const routeMap = require('../app/router-map')
 
 module.exports = appInfo => {

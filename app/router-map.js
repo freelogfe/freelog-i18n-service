@@ -2,8 +2,5 @@
 
 // method path controller
 module.exports = {
-  'get /v1/i18n/trackedRepositories/list': 'i18nManagement.getTrackedRepositories',
-  'get /v1/i18n/trackedRepository/data': 'i18nManagement.getRepositoryI18nData',
-  'put /v1/i18n/trackedRepository/data': 'i18nManagement.updateRepositoryI18nData',
-  'post /v1/i18n/trackedRepository/changes/push': 'i18nManagement.commitAndPushChanges',
+  'get /v1/i18n/index': 'home.index',
 }

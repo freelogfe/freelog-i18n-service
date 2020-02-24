@@ -1,68 +1,65 @@
 {
-  "name": "freelog-i18n-service",
+  "name": "micro-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "micro server for freelog",
   "private": true,
   "egg": {
     "declarations": true
   },
   "dependencies": {
-    "egg": "^2.15.1",
+    "egg": "^2.26.0",
     "egg-cors": "^2.2.3",
-    "egg-scripts": "^2.11.0",
+    "egg-scripts": "^2.5.0",
     "extend": "^3.0.2",
     "fs-extra": "^8.1.0",
-    "http-proxy-middleware": "^1.0.0",
-    "is-type-of": "^1.2.1",
-    "json5": "^2.1.1",
+    "http-proxy-middleware": "^0.19.0",
+    "is-type-of": "^1.2.0",
     "koa-validate": "^1.0.7",
     "koa2-connect": "^1.0.2",
-    "lodash": "^4.17.15",
-    "nan": "^2.14.0",
-    "node-gyp": "^6.1.0",
-    "nodegit": "file:nodegit",
+    "lodash": "^4.17.11",
     "object-path": "^0.11.4",
     "ora": "^4.0.3",
-    "path-to-regexp": "^6.1.0",
-    "promisify-node": "^0.5.0",
-    "ramda": "^0.27.0",
-    "request-promise-native": "^1.0.8",
-    "tar-fs": "^2.0.0"
+    "path-to-regexp": "^2.4.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",
-    "autod-egg": "^1.1.0",
-    "egg-bin": "^4.11.0",
-    "egg-ci": "^1.11.0",
-    "egg-mock": "^3.21.0",
-    "eslint": "^5.13.0",
-    "eslint-config-egg": "^7.1.0"
+    "autod-egg": "^1.0.0",
+    "egg-bin": "^4.3.5",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.14.0",
+    "eslint": "^4.11.0",
+    "eslint-config-egg": "^6.0.0",
+    "husky": "^1.1.4",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "husky": {
+    "hooks": {}
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-freelog-i18n-service",
-    "stop": "egg-scripts stop --title=egg-server-freelog-i18n-service",
+    "start": "egg-scripts start --title=egg-server-micro-server",
+    "stop": "egg-scripts stop --title=egg-server-micro-server",
     "dev": "egg-bin dev --port=7110",
     "debug": "egg-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
+    "test": "npm run test-local",
     "test-local": "egg-bin test",
     "cov": "egg-bin cov",
-    "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
+    "lint": "eslint . --fix",
+    "ci": "npm run cov",
     "autod": "autod",
-    "pack": "tar -zcf freelog-i18n-service.tar app config app.js",
-    "start:https": "egg-scripts start --https.key='./cert/server_ca.key' --https.cert='./cert/server_ca.crt' --title=egg-server-freelog-i18n-service",
-    "build:docker": "docker build -t=freelog/freelog-i18n-service -f Dockerfile-aliyun ."
+    "pack": "tar -zcf micro-server.tar app config app.js",
+    "start:https": "egg-scripts start --https.key='./cert/server_ca.key' --https.cert='./cert/server_ca.crt' --title=egg-server-micro-server",
+    "build:docker": "docker build -t=freelog/micro-server -f Dockerfile-aliyun ."
   },
   "ci": {
-    "version": "10"
+    "version": "8"
   },
   "repository": {
     "type": "git",
     "url": ""
   },
-  "author": "wwzh",
+  "author": "",
   "license": "MIT"
 }
