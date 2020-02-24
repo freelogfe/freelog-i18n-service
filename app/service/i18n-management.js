@@ -21,7 +21,9 @@ class I18nManagementService extends Service {
     const result = []
     for (const repositoryName of fse.readdirSync(i18nRepositoriesDirPath)) {
       let repositoryChanges = []
-      const { reposI18nPath, reposDirPath } = getRepositoryInfo(config, repositoryName)
+      const reposInfo = getRepositoryInfo(config, repositoryName)
+      if (reposInfo === null) continue
+      const { reposI18nPath, reposDirPath } = reposInfo
       const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
       if (repository instanceof nodegit.Repository) {
         const changes = await getChangesByStatus(repository)
@@ -148,23 +150,23 @@ class I18nManagementService extends Service {
   }
 
   async updateI18nData() {
-    try {
-      const { repositoryName, changedFiles } = this.ctx.request.body
-      for (const item of changedFiles) {
-        const { targetPath, targetJSONString } = item
-        await this.updateI18nFileData(targetPath, targetJSONString)
-      }
-      let repositoryChanges = []
-      const { reposDirPath } = getRepositoryInfo(this.app.config.nodegit, repositoryName)
-      const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
-      if (repository instanceof nodegit.Repository) {
-        const changes = await getChangesByStatus(repository)
-        repositoryChanges = [ ...changes ]
-      }
-      return repositoryChanges
-    } catch (e) {
-      throw new Error('body参数（targetPath或targetData）有误！')
+    const { repositoryName, changedFiles } = this.ctx.request.body
+    for (const item of changedFiles) {
+      const { targetPath, targetJSONString } = item
+      await this.updateI18nFileData(targetPath, targetJSONString)
     }
+    let repositoryChanges = []
+    const reposInfo = getRepositoryInfo(this.app.config.nodegit, repositoryName)
+    if (reposInfo === null) {
+      throw new Error(`参数repositoryName有误：仓库（${repositoryName}）未备追踪`)
+    }
+    const { reposDirPath } = reposInfo
+    const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
+    if (repository instanceof nodegit.Repository) {
+      const changes = await getChangesByStatus(repository)
+      repositoryChanges = [ ...changes ]
+    }
+    return repositoryChanges
   }
 
   async updateI18nFileData(targetPath, targetJSONString) {
@@ -179,7 +181,11 @@ class I18nManagementService extends Service {
   async commitAndPushChanges() {
     const { repositoryName, commitMsg } = this.ctx.request.body
     const nodegitConfig = this.app.config.nodegit
-    const { reposDirPath } = getRepositoryInfo(nodegitConfig, repositoryName)
+    const reposInfo = getRepositoryInfo(nodegitConfig, repositoryName)
+    if (reposInfo === null) {
+      throw new Error(`参数repositoryName有误：仓库（${repositoryName}）未备追踪`)
+    }
+    const { reposDirPath } = reposInfo
     const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
     let repositoryChanges = []
     if (repository instanceof nodegit.Repository) {

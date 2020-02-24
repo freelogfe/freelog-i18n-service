@@ -11,7 +11,7 @@ class I18nManagement extends Controller {
       const result = await ctx.service.i18nManagement.index()
       ctx.success(result)
     } catch (e) {
-      ctx.error({ data: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
+      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
     }
   }
 
@@ -20,7 +20,7 @@ class I18nManagement extends Controller {
       const result = await ctx.service.i18nManagement.getI18nDataByPath()
       ctx.success(result)
     } catch (e) {
-      ctx.error({ data: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
+      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
     }
   }
 
@@ -29,7 +29,7 @@ class I18nManagement extends Controller {
       const result = await ctx.service.i18nManagement.updateI18nData()
       ctx.success(result)
     } catch (e) {
-      ctx.error({ data: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
+      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
     }
   }
 
