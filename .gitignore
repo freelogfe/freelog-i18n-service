@@ -2,7 +2,6 @@ logs/
 i18n-repositories/
 npm-debug.log
 yarn-error.log
-node_modules/
 package-lock.json
 yarn.lock
 coverage/
@@ -11,4 +10,5 @@ run/
 .DS_Store
 *.sw*
 *.un~
-
+# /node_modules
+# !node_modules/nodegit
