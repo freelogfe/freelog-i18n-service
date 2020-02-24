@@ -1,0 +1,19 @@
+FROM daocloud.io/node:8.5-alpine
+
+MAINTAINER daizch <daizech@gmail.com>
+
+RUN mkdir -p /data/freelog-i18n-service
+
+WORKDIR /data/freelog-i18n-service
+
+COPY . /data/freelog-i18n-service
+
+RUN npm install
+
+ENV NODE_ENV prod
+ENV EGG_SERVER_ENV prod
+ENV PORT 5002
+
+EXPOSE 5002
+
+CMD [ "npm", "start" ]
