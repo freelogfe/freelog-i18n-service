@@ -1,7 +1,8 @@
 'use strict'
 const fse = require('fs-extra')
-// const path = require('path')
-const nodegit = require('nodegit')
+const path = require('path')
+const CWD = process.cwd()
+const nodegit = require(path.join(CWD, 'nodegit/dist/nodegit.js'))
 const cloneRepository = require('./cloneRepository')
 const getRepositoryInfo = require('./getRepositoryInfo')
 
@@ -31,6 +32,7 @@ async function cloneTrackedRepository(nodegitConfig, reposName) {
   if (reposInfo != null) {
     const { reposDirPath, reposUrl } = reposInfo
     repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
+    console.log('----', reposDirPath, reposUrl)
     if (repository instanceof nodegit.Repository) {
       console.log(`Repository '${reposName}' already exists!`)
     } else {

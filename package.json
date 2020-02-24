@@ -14,13 +14,20 @@
     "fs-extra": "^8.1.0",
     "http-proxy-middleware": "^1.0.0",
     "is-type-of": "^1.2.1",
+    "json5": "^2.1.1",
     "koa-validate": "^1.0.7",
     "koa2-connect": "^1.0.2",
     "lodash": "^4.17.15",
-    "nodegit": "^0.26.4",
+    "nan": "^2.14.0",
+    "node-gyp": "^6.1.0",
+    "nodegit": "file:nodegit",
     "object-path": "^0.11.4",
     "ora": "^4.0.3",
-    "path-to-regexp": "^6.1.0"
+    "path-to-regexp": "^6.1.0",
+    "promisify-node": "^0.5.0",
+    "ramda": "^0.27.0",
+    "request-promise-native": "^1.0.8",
+    "tar-fs": "^2.0.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",

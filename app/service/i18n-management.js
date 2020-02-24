@@ -1,9 +1,10 @@
 'use strict'
 const Service = require('egg').Service
-const nodegit = require('nodegit')
 const path = require('path')
 const fse = require('fs-extra')
 const objectPath = require('object-path')
+const CWD = process.cwd()
+const nodegit = require(path.join(CWD, 'nodegit/dist/nodegit.js'))
 const getRepositoryInfo = require('./nodegit-core/getRepositoryInfo')
 const getChangesByStatus = require('./nodegit-core/getChangesByStatus')
 const addAndCommit = require('./nodegit-core/addAndCommit')

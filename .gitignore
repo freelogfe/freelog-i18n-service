@@ -10,6 +10,5 @@ run/
 .DS_Store
 *.sw*
 *.un~
-nodegit/
-# /node_modules
-# !node_modules/nodegit
+# nodegit/
+/node_modules

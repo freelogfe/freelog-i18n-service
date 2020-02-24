@@ -7,6 +7,10 @@ module.exports = async app => {
   app.config.coreMiddleware.unshift('httpProxy')
   app.ready(async err => {
     if (err) throw err
-    await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
+    try {
+      await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
+    } catch (e) {
+      console.log('[Error]:', e)
+    }
   })
 }

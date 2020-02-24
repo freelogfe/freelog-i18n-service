@@ -1,5 +1,7 @@
 'use strict'
-const nodegit = require('nodegit')
+const path = require('path')
+const CWD = process.cwd()
+const nodegit = require(path.join(CWD, 'nodegit/dist/nodegit.js'))
 const getChangesByStatus = require('./getChangesByStatus')
 
 async function addAndCommit(repository, userName, userEmail, commitMsg) {
