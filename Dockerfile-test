@@ -8,7 +8,6 @@ WORKDIR /data/freelog-i18n-service
 
 COPY . /data/freelog-i18n-service
 
-RUN npm install nodegit
 RUN npm install
 
 ENV NODE_ENV test
