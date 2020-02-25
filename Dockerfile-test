@@ -8,9 +8,8 @@ WORKDIR /data/freelog-i18n-service
 
 COPY . /data/freelog-i18n-service
 
-apt-get install libssl-dev
+RUN apt-get install libssl-dev
 
-RUN npm config set registry https://registry.npm.taobao.org 
 RUN npm install
 
 ENV NODE_ENV test
