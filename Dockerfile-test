@@ -8,8 +8,6 @@ WORKDIR /data/freelog-i18n-service
 
 COPY . /data/freelog-i18n-service
 
-RUN apt-get install libssl-dev
-
 RUN npm install
 
 ENV NODE_ENV test
