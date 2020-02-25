@@ -27,6 +27,11 @@ class HomeController extends Controller {
       ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
     }
   }
+
+  async readdir(ctx) {
+    const { dirPath } = ctx.query
+    ctx.success(fse.readdirSync(path.resolve(process.cwd(), decodeURIComponent(dirPath))))
+  }
 }
 
 module.exports = HomeController

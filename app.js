@@ -11,6 +11,7 @@ module.exports = async app => {
       console.log(`[Error]: ${err}`)
     }
     try {
+      console.log('[Track Repositories]: init!')
       await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
     } catch (e) {
       console.log(`[Error]: ${e}`)

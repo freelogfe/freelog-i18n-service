@@ -1,7 +1,9 @@
 'use strict'
+const path = require('path')
+const CWD = process.cwd()
 
 async function checkRemoteBranch(repository, brName) {
-  const nodegit = require('nodegit')
+  const nodegit = require(path.resolve(CWD, 'nodegit/dist/nodegit.js'))
   let reference
   try {
     reference = await repository.getReference(brName).catch(e => e)
