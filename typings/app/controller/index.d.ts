@@ -3,9 +3,11 @@
 
 import 'egg';
 import ExportHome = require('../../../app/controller/home');
+import ExportI18nManagement = require('../../../app/controller/i18n-management');
 
 declare module 'egg' {
   interface IController {
     home: ExportHome;
+    i18nManagement: ExportI18nManagement;
   }
 }

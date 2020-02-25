@@ -1,6 +1,6 @@
 'use strict'
 const path = require('path')
-function getRepositoryInfo(nodegitConfig, repositoryName) {
+async function getRepositoryInfo(nodegitConfig, repositoryName) {
   const { trackedRepositories, i18nRepositoriesDirPath } = nodegitConfig
   const CWD = process.cwd()
   for (const reposName in trackedRepositories) {
@@ -17,6 +17,5 @@ function getRepositoryInfo(nodegitConfig, repositoryName) {
   }
   return null
 }
-
 
 module.exports = getRepositoryInfo

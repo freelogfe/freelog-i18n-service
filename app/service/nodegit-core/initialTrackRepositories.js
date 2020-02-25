@@ -25,13 +25,13 @@ async function cloneAllTrackedRepositories(nodegitConfig) {
 }
 
 async function cloneTrackedRepository(nodegitConfig, reposName) {
-  const reposInfo = getRepositoryInfo(nodegitConfig, reposName)
+  const reposInfo = await getRepositoryInfo(nodegitConfig, reposName)
   let repository
   if (reposInfo != null) {
     const { reposDirPath, reposUrl } = reposInfo
     const nodegit = require('nodegit')
-    repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
     console.log('----', reposDirPath, reposUrl)
+    repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
     if (repository instanceof nodegit.Repository) {
       console.log(`Repository '${reposName}' already exists!`)
     } else {
