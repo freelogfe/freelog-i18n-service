@@ -14,6 +14,12 @@ class HomeController extends Controller {
     const result = fse.readJSONSync(path.resolve(process.cwd(), 'package.json'))
     this.ctx.success(result)
   }
+
+  async initialTrackRepositories() {
+    const { ctx, app } = this
+    ctx.success('----')
+    console.log(this.app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit))
+  }
 }
 
 module.exports = HomeController
