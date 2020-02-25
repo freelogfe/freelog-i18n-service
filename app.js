@@ -10,6 +10,10 @@ module.exports = async app => {
     if (err) {
       console.log(`[Error]: ${err}`)
     }
-    await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
+    try {
+      await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
+    } catch (e) {
+      console.log(`[Error]: ${e}`)
+    }
   })
 }
