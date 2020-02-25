@@ -1,9 +1,11 @@
 'use strict'
 const ora = require('ora')
+const path = require('path')
+const cwd = process.cwd()
 
 const cloneStatus = {}
 async function cloneRepository(reposUrl, reposDirPath, token) {
-  const nodegit = require('nodegit')
+  const nodegit = require(path.resolve(cwd, 'nodegit/dist/nodegit.js'))
   let repository
   const spinner = ora(`clone into '${reposUrl}'...`)
   spinner.start()

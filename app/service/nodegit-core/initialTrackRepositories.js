@@ -2,12 +2,14 @@
 const fse = require('fs-extra')
 const cloneRepository = require('./cloneRepository')
 const getRepositoryInfo = require('./getRepositoryInfo')
+const path = require('path')
+const CWD = process.cwd()
 
 async function initialTrackRepositories(nodegitConfig) {
   const { I18N_BRANCH_NAME } = nodegitConfig
   const repositories = await cloneAllTrackedRepositories(nodegitConfig)
   repositories.forEach(async repos => {
-    const nodegit = require('nodegit')
+    const nodegit = require(path.resolve(CWD, 'nodegit/dist/nodegit.js'))
     if (repos instanceof nodegit.Repository) {
       await this.checkRemoteBranch(repos, I18N_BRANCH_NAME)
     }
@@ -29,7 +31,7 @@ async function cloneTrackedRepository(nodegitConfig, reposName) {
   let repository
   if (reposInfo != null) {
     const { reposDirPath, reposUrl } = reposInfo
-    const nodegit = require('nodegit')
+    const nodegit = require(path.resolve(CWD, 'nodegit/dist/nodegit.js'))
     console.log('----', reposDirPath, reposUrl)
     repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
     if (repository instanceof nodegit.Repository) {
