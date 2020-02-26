@@ -52,6 +52,7 @@ module.exports = appInfo => {
       token: '31da85b9a0bce3e5c5a05b9be4dd106d3baf987e',
       name: 'Wweizhi',
       email: '790727372@qq.com',
+      password: 'Wwz_3110641',
     },
     i18nRepositoriesDirPath: 'i18n-repositories/',
     trackedRepositories: {

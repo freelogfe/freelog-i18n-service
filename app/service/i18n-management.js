@@ -193,7 +193,7 @@ class I18nManagementService extends Service {
     if (repository instanceof nodegit.Repository) {
       const { user, REMOTE_ORIGIN } = nodegitConfig
       await addAndCommit(repository, user.name, user.email, commitMsg)
-      await push(repository, REMOTE_ORIGIN, user.token)
+      await push(repository, REMOTE_ORIGIN, user)
       const changes = await getChangesByStatus(repository)
       repositoryChanges = [ ...changes ]
     }
