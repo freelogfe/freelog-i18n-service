@@ -32,6 +32,22 @@ class HomeController extends Controller {
     const { dirPath } = ctx.query
     ctx.success(fse.readdirSync(path.resolve(process.cwd(), decodeURIComponent(dirPath))))
   }
+
+  async removeRepository(ctx) {
+    const { repositryName } = ctx.query
+    try {
+      const { i18nRepositoriesDirPath } = this.app.config.nodegit
+      const reposDirPath = path.resolve(process.cwd(), i18nRepositoriesDirPath, repositryName)
+      if (fse.pathExistsSync(reposDirPath)) {
+        fse.removeSync(reposDirPath)
+        ctx.success(`仓库${repositryName}（${reposDirPath}）删除成功！！！`)
+      } else {
+        throw new Error(`仓库${repositryName}不存在或不合法！`)
+      }
+    } catch (e) {
+      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
+    }
+  }
 }
 
 module.exports = HomeController

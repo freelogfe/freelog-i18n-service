@@ -38,7 +38,6 @@ class I18nManagement extends Controller {
       const result = await ctx.service.i18nManagement.commitAndPushChanges()
       ctx.success(result)
     } catch (e) {
-      console.log('e --', e)
       ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
     }
   }
