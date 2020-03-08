@@ -49,7 +49,7 @@ module.exports = appInfo => {
 
   config.nodegit = {
     user: {
-      token: '31da85b9a0bce3e5c5a05b9be4dd106d3baf987e',
+      token: '3c9653aec77ac77203670043bb34b554cffaf1e4',
       name: 'Wweizhi',
       email: '790727372@qq.com',
       password: 'Wwz_3110641',

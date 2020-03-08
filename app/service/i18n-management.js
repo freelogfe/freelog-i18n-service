@@ -57,19 +57,20 @@ class I18nManagementService extends Service {
 
   getRepositoryI18nDir(i18nRepositoriesDirPath, reposI18nPath) {
     const target = []
+    const targetRegExp = new RegExp(i18nRepositoriesDirPath + '(\/?)')
     for (const tmpName of fse.readdirSync(reposI18nPath)) {
       const tmpPath = path.join(reposI18nPath, tmpName)
       const stats = fse.statSync(tmpPath)
       if (stats.isDirectory()) {
         target.push({
           name: tmpName,
+          path: tmpPath.replace(targetRegExp, ''),
           children: this.getRepositoryI18nDir(i18nRepositoriesDirPath, tmpPath),
         })
         target[tmpName] = this.getRepositoryI18nDir(i18nRepositoriesDirPath, tmpPath)
       } else if (stats.isFile() && /(\.json)$/.test(tmpName)) {
         const fileName = tmpName.replace(/(\.json)$/, '')
         if (fileName !== 'package' && fileName !== 'package-lock') {
-          const targetRegExp = new RegExp(i18nRepositoriesDirPath + '(\/?)')
           target.push({
             name: tmpName,
             fileName,
@@ -181,7 +182,7 @@ class I18nManagementService extends Service {
 
   async commitAndPushChanges() {
     const nodegit = require('nodegit')
-    const { repositoryName, commitMsg } = this.ctx.request.body
+    const { repositoryName, commitMsg, accessToken } = this.ctx.request.body
     const nodegitConfig = this.app.config.nodegit
     const reposInfo = await getRepositoryInfo(nodegitConfig, repositoryName)
     if (reposInfo === null) {
@@ -193,7 +194,7 @@ class I18nManagementService extends Service {
     if (repository instanceof nodegit.Repository) {
       const { user, REMOTE_ORIGIN } = nodegitConfig
       await addAndCommit(repository, user.name, user.email, commitMsg)
-      await push(repository, REMOTE_ORIGIN, user)
+      await push(repository, REMOTE_ORIGIN, user, accessToken)
       const changes = await getChangesByStatus(repository)
       repositoryChanges = [ ...changes ]
     }

@@ -9,6 +9,8 @@ module.exports = {
   'get /v1/i18n/initialTrackRepositories': 'home.initialTrackRepositories',
   'get /v1/i18n/trackedRepositories/list': 'i18nManagement.getTrackedRepositories',
   'get /v1/i18n/trackedRepository/data': 'i18nManagement.getRepositoryI18nData',
+  'get /v1/i18n/getGithubUserInfo': 'i18nManagement.getGithubUserInfo',
   'put /v1/i18n/trackedRepository/data': 'i18nManagement.updateRepositoryI18nData',
   'post /v1/i18n/trackedRepository/changes/push': 'i18nManagement.commitAndPushChanges',
+  'post /v1/i18n/getGithubAccessToken': 'i18nManagement.getGithubOAuthAccessToken',
 }

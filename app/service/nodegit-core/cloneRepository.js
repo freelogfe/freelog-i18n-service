@@ -3,7 +3,7 @@ const ora = require('ora')
 // const path = require('path')
 
 const cloneStatus = {}
-async function cloneRepository(reposUrl, reposDirPath, token) {
+async function cloneRepository(reposUrl, reposDirPath, userConfig) {
   const nodegit = require('nodegit')
   let repository
   const spinner = ora(`clone into '${reposUrl}'...`)
@@ -15,7 +15,8 @@ async function cloneRepository(reposUrl, reposDirPath, token) {
         fetchOpts: {
           callbacks: {
             credentials() {
-              return nodegit.Cred.userpassPlaintextNew(token, 'x-oauth-basic')
+              // return nodegit.Cred.userpassPlaintextNew(userConfig.token, 'x-oauth-basic')
+              return nodegit.Cred.userpassPlaintextNew(userConfig.name, userConfig.password)
             },
             certificateCheck() {
               return 0

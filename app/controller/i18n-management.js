@@ -2,44 +2,55 @@
 
 const Controller = require('egg').Controller
 // const fse = require('fs-extra')
-const errorCode = require('../enum/error-code')
-const retCode = require('../enum/ret-code')
+// const errorCode = require('../enum/error-code')
+// const retCode = require('../enum/ret-code')
 
 class I18nManagement extends Controller {
   async getTrackedRepositories(ctx) {
-    try {
-      const result = await ctx.service.i18nManagement.index()
-      ctx.success(result)
-    } catch (e) {
-      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
-    }
+    const result = await ctx.service.i18nManagement.index()
+    ctx.success(result)
   }
 
   async getRepositoryI18nData(ctx) {
-    try {
-      const result = await ctx.service.i18nManagement.getI18nDataByPath()
-      ctx.success(result)
-    } catch (e) {
-      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
-    }
+    const result = await ctx.service.i18nManagement.getI18nDataByPath()
+    ctx.success(result)
   }
 
   async updateRepositoryI18nData(ctx) {
-    try {
-      const result = await ctx.service.i18nManagement.updateI18nData()
-      ctx.success(result)
-    } catch (e) {
-      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
-    }
+    const result = await ctx.service.i18nManagement.updateI18nData()
+    ctx.success(result)
   }
 
   async commitAndPushChanges(ctx) {
-    try {
-      const result = await ctx.service.i18nManagement.commitAndPushChanges()
-      ctx.success(result)
-    } catch (e) {
-      ctx.error({ msg: e, errorCode: errorCode.autoSnapError, ret: retCode.serverError })
+    const result = await ctx.service.i18nManagement.commitAndPushChanges()
+    ctx.success(result)
+  }
+
+  async getGithubOAuthAccessToken(ctx) {
+    const { client_id, client_secret, code } = ctx.request.body
+    const response = await this.app.curl(`https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}`, {
+      method: 'post',
+      dataType: 'json',
+    })
+    const oAuthData = response.data
+    if (oAuthData.error) {
+      throw new Error(oAuthData.error)
+    } else {
+      ctx.success(oAuthData)
     }
+  }
+
+  async getGithubUserInfo(ctx) {
+    const { accessToken } = ctx.request.query
+    const response = await this.app.curl('https://api.github.com/user', {
+      method: 'get',
+      dataType: 'json',
+      headers: {
+        accept: 'application/json',
+        Authorization: `token ${accessToken}`,
+      },
+    })
+    ctx.success(response.data)
   }
 }
 

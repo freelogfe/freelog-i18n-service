@@ -1,6 +1,6 @@
 'use strict'
 
-async function push(repository, remote, userConfig) {
+async function push(repository, remote, userConfig, accessToken) {
   const nodegit = require('nodegit')
   const remoteResult = await repository.getRemote(remote)
   let refSpecs = await remoteResult.getPushRefspecs()
@@ -17,7 +17,7 @@ async function push(repository, remote, userConfig) {
     {
       callbacks: {
         credentials() {
-          // return nodegit.Cred.userpassPlaintextNew(userConfig.token, 'x-oauth-basic')
+          return nodegit.Cred.userpassPlaintextNew(accessToken, 'x-oauth-basic')
           return nodegit.Cred.userpassPlaintextNew(userConfig.name, userConfig.password)
         },
       },

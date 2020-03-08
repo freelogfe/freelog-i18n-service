@@ -39,8 +39,7 @@ async function cloneTrackedRepository(nodegitConfig, reposName) {
       if (fse.pathExistsSync(reposDirPath)) {
         fse.removeSync(reposDirPath)
       }
-      const token = nodegitConfig.user && nodegitConfig.user.token || ''
-      repository = await cloneRepository(reposUrl, reposDirPath, token)
+      repository = await cloneRepository(reposUrl, reposDirPath, nodegitConfig.user)
     }
   }
   return repository
