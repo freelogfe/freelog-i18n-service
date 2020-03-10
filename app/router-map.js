@@ -13,4 +13,6 @@ module.exports = {
   'put /v1/i18n/trackedRepository/data': 'i18nManagement.updateRepositoryI18nData',
   'post /v1/i18n/trackedRepository/changes/push': 'i18nManagement.commitAndPushChanges',
   'post /v1/i18n/getGithubAccessToken': 'i18nManagement.getGithubOAuthAccessToken',
+  'post /v1/i18n/trackedRepository/newModule': 'i18nManagement.creaetI18nNewModule',
+  'delete /v1/i18n/trackedRepository/module': 'i18nManagement.deleteI18nModule',
 }

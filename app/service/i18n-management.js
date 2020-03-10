@@ -200,6 +200,29 @@ class I18nManagementService extends Service {
     }
     return repositoryChanges
   }
+
+  async creaetNewModule() {
+    const { repositoryName, moduleName, languages } = this.ctx.request.body
+    const reposInfo = await getRepositoryInfo(this.app.config.nodegit, repositoryName)
+    const { reposI18nPath } = reposInfo
+    for (let i = 0; i < languages.length; i++) {
+      const fileName = path.join(reposI18nPath, moduleName, languages[i], 'index.json')
+      fse.ensureFileSync(fileName)
+      fse.writeJsonSync(fileName, {})
+    }
+    const result = await this.getRepositories()
+    return result
+  }
+
+  async deleteModule() {
+    const { repositoryName, moduleName } = this.ctx.request.body
+    const reposInfo = await getRepositoryInfo(this.app.config.nodegit, repositoryName)
+    const { reposI18nPath } = reposInfo
+    const reposModuleDirPath = path.join(reposI18nPath, moduleName)
+    fse.removeSync(reposModuleDirPath)
+    const result = await this.getRepositories()
+    return result
+  }
 }
 
 module.exports = I18nManagementService

@@ -17,8 +17,9 @@ async function push(repository, remote, userConfig, accessToken) {
     {
       callbacks: {
         credentials() {
-          return nodegit.Cred.userpassPlaintextNew(accessToken, 'x-oauth-basic')
           return nodegit.Cred.userpassPlaintextNew(userConfig.name, userConfig.password)
+          // eslint-disable-next-line no-unreachable
+          return nodegit.Cred.userpassPlaintextNew(accessToken, 'x-oauth-basic')
         },
       },
     }

@@ -7,7 +7,7 @@ const Controller = require('egg').Controller
 
 class I18nManagement extends Controller {
   async getTrackedRepositories(ctx) {
-    const result = await ctx.service.i18nManagement.index()
+    const result = await ctx.service.i18nManagement.getRepositories()
     ctx.success(result)
   }
 
@@ -51,6 +51,16 @@ class I18nManagement extends Controller {
       },
     })
     ctx.success(response.data)
+  }
+
+  async creaetI18nNewModule(ctx) {
+    const result = await ctx.service.i18nManagement.creaetNewModule()
+    ctx.success(result)
+  }
+
+  async deleteI18nModule(ctx) {
+    const result = await ctx.service.i18nManagement.deleteModule()
+    ctx.success(result)
   }
 }
 
