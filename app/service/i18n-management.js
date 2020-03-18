@@ -23,7 +23,7 @@ class I18nManagementService extends Service {
       let repositoryChanges = []
       const reposInfo = await getRepositoryInfo(config, repositoryName)
       if (reposInfo === null) continue
-      const { reposI18nPath, reposDirPath } = reposInfo
+      const { reposUrl, reposI18nPath, reposDirPath, reposI18nBranch } = reposInfo
       const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
       if (repository instanceof nodegit.Repository) {
         const changes = await getChangesByStatus(repository)
@@ -48,8 +48,11 @@ class I18nManagementService extends Service {
         }
       })
       result.push({
-        repositoryName, repositoryChanges,
+        repositoryName,
+        repositoryUrl: reposUrl,
+        repositoryI18nBranch: reposI18nBranch,
         directoryTree: reposI18nDir,
+        repositoryChanges,
       })
     }
     return result
@@ -85,49 +88,62 @@ class I18nManagementService extends Service {
   // eslint-disable-next-line valid-jsdoc
   /**
    * pathType (String):
+   * 0: 所有文件
    * 1: 文件路径，如freelogfe-web-repos/packages/@freelog/freelog-i18n/console/en/common.json
    * 2: module文件夹路径：如freelogfe-web-repos/packages/@freelog/freelog-i18n/console
    * 3: lang文件夹路径：如freelogfe-web-repos/packages/@freelog/freelog-i18n/console/en
    */
   async getI18nDataByPath() {
     const { i18nRepositoriesDirPath } = this.app.config.nodegit
-    const { targetPath, pathType } = this.ctx.query
+    const { targetPath, pathType, repositoryName } = this.ctx.query
     const result = {}
     let tmpPath = decodeURIComponent(targetPath).replace(/^(\/)|(\/)$/g, '')
     const tmpArr = tmpPath.split('/')
     tmpPath = path.join(process.cwd(), i18nRepositoriesDirPath, tmpPath)
-    const repositoryName = tmpArr[0]
-    if (fse.pathExistsSync(tmpPath)) {
-      switch (+pathType) {
-        case 1: {
-          const [ moduleName, lang, fileName ] = tmpArr.slice(-3)
-          if (/(\.json)$/.test(fileName)) {
-            const file = fileName.replace(/(\.json)$/i, '')
-            const data = fse.readJSONSync(tmpPath)
-            if (file === 'index') {
-              objectPath.set(result, [ repositoryName, moduleName, lang ], data)
-            } else {
-              objectPath.set(result, [ repositoryName, moduleName, lang, file ], data)
-            }
-          }
-          break
-        }
-        case 2: {
-          const [ moduleName ] = tmpArr.slice(-1)
-          for (const lang of fse.readdirSync(tmpPath)) {
-            const data = this.getI18nByLangPath(path.join(tmpPath, lang))
+
+    switch (+pathType) {
+      case 0: {
+        const reposInfo = await getRepositoryInfo(this.app.config.nodegit, repositoryName)
+        fse.readdirSync(reposInfo.reposI18nPath).filter(moduleName => {
+          const stats = fse.statSync(path.join(reposInfo.reposI18nPath, moduleName))
+          return stats.isDirectory()
+        }).forEach(moduleName => {
+          const modulePath = path.join(reposInfo.reposI18nPath, moduleName)
+          for (const lang of fse.readdirSync(modulePath)) {
+            const data = this.getI18nByLangPath(path.join(modulePath, lang))
             objectPath.set(result, [ repositoryName, moduleName, lang ], data)
           }
-          break
-        }
-        case 3: {
-          const [ moduleName, lang ] = tmpArr.slice(-2)
-          const data = this.getI18nByLangPath(tmpPath)
-          objectPath.set(result, [ repositoryName, moduleName, lang ], data)
-          break
-        }
-        default:
+        })
+        break
       }
+      case 1: {
+        const [ moduleName, lang, fileName ] = tmpArr.slice(-3)
+        if (/(\.json)$/.test(fileName)) {
+          const file = fileName.replace(/(\.json)$/i, '')
+          const data = fse.readJSONSync(tmpPath)
+          if (file === 'index') {
+            objectPath.set(result, [ repositoryName, moduleName, lang ], data)
+          } else {
+            objectPath.set(result, [ repositoryName, moduleName, lang, file ], data)
+          }
+        }
+        break
+      }
+      case 2: {
+        const [ moduleName ] = tmpArr.slice(-1)
+        for (const lang of fse.readdirSync(tmpPath)) {
+          const data = this.getI18nByLangPath(path.join(tmpPath, lang))
+          objectPath.set(result, [ repositoryName, moduleName, lang ], data)
+        }
+        break
+      }
+      case 3: {
+        const [ moduleName, lang ] = tmpArr.slice(-2)
+        const data = this.getI18nByLangPath(tmpPath)
+        objectPath.set(result, [ repositoryName, moduleName, lang ], data)
+        break
+      }
+      default:
     }
     return result
   }

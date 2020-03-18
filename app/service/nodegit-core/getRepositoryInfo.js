@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 async function getRepositoryInfo(nodegitConfig, repositoryName) {
-  const { trackedRepositories, i18nRepositoriesDirPath } = nodegitConfig
+  const { trackedRepositories, i18nRepositoriesDirPath, I18N_BRANCH_NAME } = nodegitConfig
   for (const reposName in trackedRepositories) {
     const { reposUrl, reposI18nPath } = trackedRepositories[reposName]
     if (reposName === repositoryName) {
@@ -11,6 +11,7 @@ async function getRepositoryInfo(nodegitConfig, repositoryName) {
         reposUrl,
         reposDirPath,
         reposI18nPath: path.join(reposDirPath, reposI18nPath),
+        reposI18nBranch: I18N_BRANCH_NAME,
       }
     }
   }
