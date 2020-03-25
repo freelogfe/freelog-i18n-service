@@ -7,8 +7,23 @@ const Controller = require('egg').Controller
 
 class I18nManagement extends Controller {
   async getTrackedRepositories(ctx) {
-    const result = await ctx.service.i18nManagement.getRepositories()
+    const result = await ctx.service.i18nManagement.scanAllRepositories()
     ctx.success(result)
+  }
+
+  async trackedRepository(ctx) {
+    const { repositoryName } = ctx.query
+    const result = await ctx.service.i18nManagement.scanRepository(repositoryName)
+    if (result != null) {
+      ctx.success(result)
+    } else {
+      ctx.error({ msg: '仓库不存在或仓库未完全克隆！' })
+    }
+  }
+
+  async reTrackRepository(ctx) {
+    ctx.success(null)
+    await ctx.service.i18nManagement.reTrackRepository()
   }
 
   async getRepositoryI18nData(ctx) {
@@ -18,6 +33,11 @@ class I18nManagement extends Controller {
 
   async updateRepositoryI18nData(ctx) {
     const result = await ctx.service.i18nManagement.updateI18nData()
+    ctx.success(result)
+  }
+
+  async pullRepository(ctx) {
+    const result = await ctx.service.i18nManagement.pullRepository()
     ctx.success(result)
   }
 
@@ -61,6 +81,27 @@ class I18nManagement extends Controller {
   async deleteI18nModule(ctx) {
     const result = await ctx.service.i18nManagement.deleteModule()
     ctx.success(result)
+  }
+
+  async downloadFile(ctx) {
+    await ctx.service.i18nManagement.downloadI18nFile()
+  }
+
+  async checkRepository(ctx) {
+    const result = await ctx.service.i18nManagement.checkRepository()
+    ctx.success(result)
+  }
+
+  async getRepositoryInfo(ctx) {
+    const { repositoryName } = ctx.query
+    const result = await ctx.service.keysInfoMapHandler.getKeysInfoMappingTable(repositoryName)
+    ctx.success(result)
+  }
+
+  async updateKeyInfo(ctx) {
+    const { repositoryName, moduleName, key, keyInfo } = ctx.request.body
+    await ctx.service.keysInfoMapHandler.updateKeyInfo(repositoryName, moduleName, key, keyInfo)
+    ctx.success(null)
   }
 }
 

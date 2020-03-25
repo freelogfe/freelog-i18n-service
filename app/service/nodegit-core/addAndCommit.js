@@ -10,12 +10,7 @@ async function addAndCommit(repository, userName, userEmail, commitMsg) {
   } else {
     const signature = nodegit.Signature.now(userName, userEmail)
     commitId = await commitAllFiles(repository, changes, signature, commitMsg)
-    console.log('[i18n nodeigt]: commitId - ', commitId)
-    // const errorCode = await push(repository)
-
-    // if (errorCode == null) {
-    //   console.log(`[nodegit i18n] push success! ${commitId}`)
-    // }
+    console.log('[i18n success]: commitId - ', commitId)
   }
   return commitId
 }
@@ -33,4 +28,3 @@ async function commitAllFiles(repository, changes, signature, commitMsg) {
 }
 
 module.exports = addAndCommit
-exports.commitAllFiles = commitAllFiles

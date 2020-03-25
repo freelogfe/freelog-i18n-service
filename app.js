@@ -1,7 +1,7 @@
 'use strict'
 
 const koaValidate = require('koa-validate')
-console.log('[Test Log]: 启动 app.js')
+console.log('启动 app.js')
 
 module.exports = async app => {
   koaValidate(app)
@@ -11,7 +11,6 @@ module.exports = async app => {
       console.log(`[Error]: ${err}`)
     }
     try {
-      console.log('[Track Repositories]: init!')
       await app.serviceClasses.nodegitCore.initialTrackRepositories(app.config.nodegit)
     } catch (e) {
       console.log(`[Error]: ${e}`)

@@ -5,57 +5,71 @@ const fse = require('fs-extra')
 const objectPath = require('object-path')
 const getRepositoryInfo = require('./nodegit-core/getRepositoryInfo')
 const getChangesByStatus = require('./nodegit-core/getChangesByStatus')
-const addAndCommit = require('./nodegit-core/addAndCommit')
 const push = require('./nodegit-core/push')
+const pull = require('./nodegit-core/pull')
+const checkRepository = require('./nodegit-core/checkRepository')
+const repositoryStatusMap = require('./repositoryStatusMap')
 
 class I18nManagementService extends Service {
   async index() {
-    const result = await this.getRepositories()
+    const result = await this.scanAllRepositories()
     return result
   }
 
-  async getRepositories() {
-    const nodegit = require('nodegit')
+  async scanAllRepositories() {
     const config = this.app.config.nodegit
     const i18nRepositoriesDirPath = path.resolve(process.cwd(), config.i18nRepositoriesDirPath)
     const result = []
     for (const repositoryName of fse.readdirSync(i18nRepositoriesDirPath)) {
-      let repositoryChanges = []
-      const reposInfo = await getRepositoryInfo(config, repositoryName)
-      if (reposInfo === null) continue
-      const { reposUrl, reposI18nPath, reposDirPath, reposI18nBranch } = reposInfo
-      const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
-      if (repository instanceof nodegit.Repository) {
-        const changes = await getChangesByStatus(repository)
-        repositoryChanges = [ ...changes ]
+      const tmpResult = await this.scanRepository(repositoryName)
+      if (tmpResult !== null) {
+        result.push(tmpResult)
       }
-      const reposI18nDir = this.getRepositoryI18nDir(i18nRepositoriesDirPath, reposI18nPath)
-      reposI18nDir.forEach(_module => {
-        _module.keys = [ repositoryName, _module.name ]
-        _module.keysType = 'module'
-        if (_module.children) {
-          _module.children.forEach(lang => {
-            lang.keys = [ repositoryName, _module.name, lang.name ]
-            lang.keysType = 'language'
-            if (lang.children) {
-              lang.children.forEach(file => {
-                file.keys = [ repositoryName, _module.name, lang.name, file.fileName ]
-                file.keysType = 'file'
-                file.language = lang.name
-              })
-            }
-          })
-        }
-      })
-      result.push({
-        repositoryName,
-        repositoryUrl: reposUrl,
-        repositoryI18nBranch: reposI18nBranch,
-        directoryTree: reposI18nDir,
-        repositoryChanges,
-      })
     }
     return result
+  }
+
+  async scanRepository(repositoryName) {
+    const config = this.app.config.nodegit
+    const checkResult = await checkRepository(repositoryName, config)
+    if (!checkResult.isOK) return null
+    await this.ctx.service.keysInfoMapHandler.ensureKeysInfoMappingTable(repositoryName)
+    const nodegit = require('nodegit')
+    const reposInfo = await getRepositoryInfo(config, repositoryName)
+    const { reposUrl, reposI18nPath, reposDirPath, reposI18nBranch } = reposInfo
+    const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
+    let repositoryChanges = []
+    if (repository instanceof nodegit.Repository) {
+      repositoryChanges = await getChangesByStatus(repository)
+      repositoryChanges = repositoryStatusMap.saveChanges(repositoryName, [ ...repositoryChanges ])
+    }
+    const i18nRepositoriesDirPath = path.resolve(process.cwd(), config.i18nRepositoriesDirPath)
+    let reposI18nDir = this.getRepositoryI18nDir(i18nRepositoriesDirPath, reposI18nPath)
+    reposI18nDir = reposI18nDir.filter(m => m.fileName == null)
+    reposI18nDir.forEach(_module => {
+      _module.keys = [ repositoryName, _module.name ]
+      _module.keysType = 'module'
+      if (_module.children) {
+        _module.children.forEach(lang => {
+          lang.keys = [ repositoryName, _module.name, lang.name ]
+          lang.keysType = 'language'
+          if (lang.children) {
+            lang.children.forEach(file => {
+              file.keys = [ repositoryName, _module.name, lang.name, file.fileName ]
+              file.keysType = 'file'
+              file.language = lang.name
+            })
+          }
+        })
+      }
+    })
+    return {
+      repositoryName,
+      repositoryUrl: reposUrl,
+      repositoryI18nBranch: reposI18nBranch,
+      directoryTree: reposI18nDir,
+      repositoryChanges,
+    }
   }
 
   getRepositoryI18nDir(i18nRepositoriesDirPath, reposI18nPath) {
@@ -83,6 +97,12 @@ class I18nManagementService extends Service {
       }
     }
     return target
+  }
+
+  async reTrackRepository() {
+    const { repositoryName } = this.ctx.query
+    const reTrackRepository = require('./nodegit-core/reTrackRepository')
+    await reTrackRepository(repositoryName, this.app.config.nodegit)
   }
 
   // eslint-disable-next-line valid-jsdoc
@@ -174,15 +194,10 @@ class I18nManagementService extends Service {
       await this.updateI18nFileData(targetPath, targetJSONString)
     }
     let repositoryChanges = []
-    const reposInfo = await getRepositoryInfo(this.app.config.nodegit, repositoryName)
-    if (reposInfo === null) {
-      throw new Error(`参数repositoryName有误：仓库（${repositoryName}）未备追踪`)
-    }
-    const { reposDirPath } = reposInfo
-    const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
+    const repository = await this.openRepositoryByName(repositoryName)
     if (repository instanceof nodegit.Repository) {
-      const changes = await getChangesByStatus(repository)
-      repositoryChanges = [ ...changes ]
+      repositoryChanges = await getChangesByStatus(repository)
+      repositoryChanges = repositoryStatusMap.saveChanges(repositoryName, [ ...repositoryChanges ])
     }
     return repositoryChanges
   }
@@ -196,9 +211,8 @@ class I18nManagementService extends Service {
     }
   }
 
-  async commitAndPushChanges() {
+  async openRepositoryByName(repositoryName) {
     const nodegit = require('nodegit')
-    const { repositoryName, commitMsg, accessToken } = this.ctx.request.body
     const nodegitConfig = this.app.config.nodegit
     const reposInfo = await getRepositoryInfo(nodegitConfig, repositoryName)
     if (reposInfo === null) {
@@ -206,15 +220,32 @@ class I18nManagementService extends Service {
     }
     const { reposDirPath } = reposInfo
     const repository = await nodegit.Repository.open(reposDirPath).catch(e => e)
-    let repositoryChanges = []
+    return repository
+  }
+
+  async pullRepository() {
+    const { repositoryName } = this.ctx.query
+    const repository = await this.openRepositoryByName(repositoryName)
+    await pull(repository, this.app.config.nodegit)
+    const changes = await getChangesByStatus(repository)
+    return changes
+  }
+
+  async commitAndPushChanges() {
+    const nodegit = require('nodegit')
+    const addAndCommit = require('./nodegit-core/addAndCommit')
+    const { repositoryName, commitMsg, accessToken } = this.ctx.request.body
+    const nodegitConfig = this.app.config.nodegit
+    const repository = await this.openRepositoryByName(repositoryName)
     if (repository instanceof nodegit.Repository) {
       const { user, REMOTE_ORIGIN } = nodegitConfig
       await addAndCommit(repository, user.name, user.email, commitMsg)
+      // await pull(repository, nodegitConfig)
+      // console.log(`[Pull success]: ${repositoryName}`)
       await push(repository, REMOTE_ORIGIN, user, accessToken)
-      const changes = await getChangesByStatus(repository)
-      repositoryChanges = [ ...changes ]
+      console.log('[Push success]')
     }
-    return repositoryChanges
+    return repositoryStatusMap.clearChanges(repositoryName)
   }
 
   async creaetNewModule() {
@@ -237,6 +268,25 @@ class I18nManagementService extends Service {
     const reposModuleDirPath = path.join(reposI18nPath, moduleName)
     fse.removeSync(reposModuleDirPath)
     const result = await this.getRepositories()
+    return result
+  }
+
+  async downloadI18nFile() {
+    const ctx = this.ctx
+    const { filePath, repositoryName } = this.ctx.query
+    const reposInfo = await getRepositoryInfo(this.app.config.nodegit, repositoryName)
+    if (reposInfo != null) {
+      const fileName = filePath.split('/').pop()
+      const _filePath = path.join(reposInfo.reposDirPath, filePath)
+      ctx.attachment(fileName)
+      ctx.set('Content-Type', 'application/octet-stream')
+      ctx.body = fse.createReadStream(_filePath)
+    }
+  }
+
+  async checkRepository() {
+    const { repositoryName } = this.ctx.query
+    const result = await checkRepository(repositoryName, this.app.config.nodegit)
     return result
   }
 }

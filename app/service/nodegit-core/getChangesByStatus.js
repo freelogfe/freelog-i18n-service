@@ -21,7 +21,7 @@ async function getChangesByStatus(repository) {
       changes.add({ type: 'renamed', path })
     }
   })
-  return changes
+  return [ ...changes ]
 }
 
 module.exports = getChangesByStatus

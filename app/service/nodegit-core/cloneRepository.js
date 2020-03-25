@@ -3,7 +3,8 @@ const ora = require('ora')
 // const path = require('path')
 
 const cloneStatus = {}
-async function cloneRepository(reposUrl, reposDirPath, userConfig) {
+async function cloneRepository(reposInfo, userConfig) {
+  const { reposDirPath, reposUrl } = reposInfo
   const nodegit = require('nodegit')
   let repository
   const spinner = ora(`clone into '${reposUrl}'...`)
@@ -25,11 +26,10 @@ async function cloneRepository(reposUrl, reposDirPath, userConfig) {
         },
       })
       spinner.succeed()
-
     } catch (e) {
       cloneStatus[reposUrl] = false
       spinner.fail(e.toString())
-      console.log('[error]: ', e)
+      console.log('[Clone Repository error]: ', e)
     }
   } else {
     console.log(`cloning '${reposUrl}'...`)
