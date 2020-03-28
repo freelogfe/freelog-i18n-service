@@ -2,13 +2,16 @@ logs/
 i18n-repositories/
 npm-debug.log
 yarn-error.log
+node_modules/
 package-lock.json
 yarn.lock
 coverage/
+dist/
+.vscode/
 .idea/
 run/
 .DS_Store
 *.sw*
 *.un~
-# nodegit/
-/node_modules
+.tsbuildinfo
+.tsbuildinfo.*

@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "semicolon": [
+      false,
+      "always"
+    ]
+  },
+  "extends": [
+    "tslint-midway-contrib"
+  ]
+}
