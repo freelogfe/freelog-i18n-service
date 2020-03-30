@@ -2,18 +2,18 @@ FROM daocloud.io/node:10.15
 
 MAINTAINER daizch <daizech@gmail.com>
 
-RUN mkdir -p /data/freelog-i18n-service
+RUN mkdir -p /data/freelog-i18n-ts-service
 
-WORKDIR /data/freelog-i18n-service
+WORKDIR /data/freelog-i18n-ts-service
 
-COPY . /data/freelog-i18n-service
+COPY . /data/freelog-i18n-ts-service
 
 RUN npm install
 
 ENV NODE_ENV test
 ENV EGG_SERVER_ENV test
-ENV PORT 5110
+ENV PORT 5112
 
-EXPOSE 5110
+EXPOSE 5112
 
 CMD [ "npm", "start" ]
