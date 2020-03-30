@@ -33,7 +33,7 @@
     "node": ">=10.16.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=midway-server-freelog-i18n-service --framework=midway --ts",
+    "start": "egg-scripts start --title=midway-server-freelog-i18n-service --framework=midway --ts",
     "stop": "egg-scripts stop --title=midway-server-freelog-i18n-service",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "clean": "midway-bin clean",
