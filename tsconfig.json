@@ -1,6 +1,10 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "types": ["jest"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",

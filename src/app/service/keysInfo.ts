@@ -19,7 +19,7 @@ export class KeysInfoService implements IKeysInfoService {
   @config('nodegit')
   nodegitConfig: INodegitConfig
 
-  async getKeysInfoFilePath(repositoryName: string): Promise<string> {
+  async getFilePath(repositoryName: string): Promise<string> {
     const reposInfo = this.riService.getRepositoryInfo(repositoryName)
     if (reposInfo != null) {
       return path.join(reposInfo.reposI18nPath, `${I18N_KEYS_INFO_MAPPING_TABLE}.json`)
@@ -28,16 +28,16 @@ export class KeysInfoService implements IKeysInfoService {
     }
   }
 
-  async ensureKeysInfoFile(repositoryName: string): Promise<any> {
-    const filePath = await this.getKeysInfoFilePath(repositoryName)
+  async ensureKeysInfoFile(repositoryName: string): Promise<void> {
+    const filePath = await this.getFilePath(repositoryName)
     if (!fse.pathExistsSync(filePath)) {
       fse.ensureFileSync(filePath)
       fse.writeJSONSync(filePath, {}, { spaces: '\t' })
     }
   }
 
-  async readKeysInfoFile(repositoryName: string): Promise<any> {
-    const filePath = await this.getKeysInfoFilePath(repositoryName)
+  async readKeysInfoFile(repositoryName: string): Promise<PlainObject> {
+    const filePath = await this.getFilePath(repositoryName)
     return fse.readJSONSync(filePath)
   }
 
@@ -47,7 +47,7 @@ export class KeysInfoService implements IKeysInfoService {
   }
 
   async updateKeyInfo(repositoryName: string, moduleName: string, key: string, info: PlainObject): Promise<void> {
-    const filePath = await this.getKeysInfoFilePath(repositoryName)
+    const filePath = await this.getFilePath(repositoryName)
     const keyInfoMappingTable = await this.readKeysInfoFile(repositoryName)
     console.log('In updateKeyInfo', filePath, keyInfoMappingTable, repositoryName, moduleName, key, info)
     const tmpInfo = objectPath.get(keyInfoMappingTable, [ moduleName, key ]) || {}

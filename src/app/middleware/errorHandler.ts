@@ -4,7 +4,6 @@ import is = require('is-type-of')
 import { nextDefinition } from '../../interface/index'
 import retCodeEnum from '../enum/ret-code'
 import errCodeEnum from '../enum/error-code'
-
 export default () => {
   return async (ctx: any, next: nextDefinition) => {
     try {
@@ -22,16 +21,23 @@ export default () => {
         ctx.body = ctx.toBody(retCodeEnum.success, errCodeEnum.success, 'success', null)
       }
     } catch (e) {
-      if (is.nullOrUndefined(e)) {
-        e = new Error('not defined error') // eslint-disable-line
+      let retcode = retCodeEnum.serverError
+      let erreode = errCodeEnum.autoSnapError
+      let errMsg = 'not defined error'
+      if (is.error(e)) {
+        errMsg = e.stack
+      } else {
+        if (is.int(e.retcode)) {
+          retcode = e.retcode
+        }
+        if (is.int(e.erreode)) {
+          erreode = e.erreode
+        }
+        if (is.string(e.message)) {
+          errMsg = e.message
+        }
       }
-      if (!is.int(e.retcode)) {
-        e.retcode = retCodeEnum.serverError
-      }
-      if (!is.int(e.erreode)) {
-        e.erreode = errCodeEnum.autoSnapError
-      }
-      ctx.body = ctx.toBody(e.retcode, e.erreode, e.message || e.toString(), e.data)
+      ctx.body = ctx.toBody(retcode, erreode, errMsg, null)
     }
   }
 }

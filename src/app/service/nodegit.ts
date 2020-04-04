@@ -9,7 +9,7 @@ import { provide, config, inject } from 'midway'
 import { Repository, Remote, Reference, Signature, Commit } from 'nodegit'
 import { PlainObject, INodegitUser, INodegitConfig } from '../../interface/index'
 import { INodegitService, ICheckResult, IRepositoryChanges, IRepository, IReference } from '../../interface/nodegit'
-import { IRepositoryInfoService, IRepositoryInfo } from '../../interface/repositoryInfo'
+import { IRepositoryInfoService, IRepositoryInfo, IRepositoryInfoResult } from '../../interface/repositoryInfo'
 
 @provide('nodegitService')
 export class NodegitService implements INodegitService {
@@ -21,15 +21,15 @@ export class NodegitService implements INodegitService {
   @inject('repositoryInfoService')
   riService: IRepositoryInfoService
 
-  async openRepositoryByName(repositoryName: string): Promise<IRepository> {
+  async openRepositoryByName(repositoryName: string): Promise<[ IRepository, IRepositoryInfoResult ]> {
     const nodegit = require('nodegit')
     const reposInfo = this.riService.getRepositoryInfo(repositoryName)
     if (reposInfo === null) {
-      throw new Error(`参数repositoryName有误：仓库（${repositoryName}）未备追踪`) 
+      throw new Error(`参数repositoryName有误：仓库（${repositoryName}）未备追踪`)
     }
     const { reposDirPath } = reposInfo
     const repository = await nodegit.Repository.open(reposDirPath).catch((e: Error) => e)
-    return repository
+    return [ repository, reposInfo ]
   }
 
   async checkRepository(repositoryName: string): Promise<ICheckResult> {

@@ -31,16 +31,39 @@ export class TrackRepositoriesService implements ITrackedRepositoriesService {
   @inject()
   ctx: Context
 
+  static cacheScanResults: IRepositoryResult[]
+
   async scanAllRepositories(): Promise<IRepositoryResult[]> {
-    const i18nRepositoriesDirPath = path.resolve(process.cwd(), this.nodegitConfig.i18nRepositoriesDirPath)
-    const result = []
-    for (const repositoryName of fse.readdirSync(i18nRepositoriesDirPath)) {
-      const tmpResult = await this.scanRepository(repositoryName)
-      if (tmpResult !== null) {
-        result.push(tmpResult)
+    if (TrackRepositoriesService.cacheScanResults != null) {
+      return TrackRepositoriesService.cacheScanResults
+    } else {
+      const i18nRepositoriesDirPath = path.resolve(process.cwd(), this.nodegitConfig.i18nRepositoriesDirPath)
+      const result = []
+      for (const repositoryName of fse.readdirSync(i18nRepositoriesDirPath)) {
+        if (/^\./.test(repositoryName)) {
+          continue
+        }
+        const tmpResult = await this.scanRepository(repositoryName)
+        if (tmpResult !== null) {
+          result.push(tmpResult)
+        }
       }
+      TrackRepositoriesService.cacheScanResults = result
+      return result
     }
-    return result
+    // const i18nRepositoriesDirPath = path.resolve(process.cwd(), this.nodegitConfig.i18nRepositoriesDirPath)
+    // const result = []
+    // for (const repositoryName of fse.readdirSync(i18nRepositoriesDirPath)) {
+    //   if (/^\./.test(repositoryName)) {
+    //     continue
+    //   }
+    //   const tmpResult = await this.scanRepository(repositoryName)
+    //   if (tmpResult !== null) {
+    //     result.push(tmpResult)
+    //   }
+    // }
+    // TrackRepositoriesService.cacheScanResults = result
+    // return result
   }
 
   async scanRepository(repositoryName: string): Promise<IRepositoryResult | null> {
@@ -129,7 +152,7 @@ export class TrackRepositoriesService implements ITrackedRepositoriesService {
   }
 
   async cloneAllTrackedRepositories(): Promise<void> {
-    console.log('[Track Repositories]: start cloning!')
+    // console.log('[Track Repositories]: start cloning!')
     interface IRItem {
       repositoryName: string
       repository: IRepository

@@ -4,7 +4,7 @@ import { ITrackedRepositoriesService } from '../../interface/trackRepositories'
 
 @provide()
 @controller('/v1/trackedRepositories')
-export class trackRepositoriesController {
+export class TrackRepositoriesController {
 
   @inject()
   ctx: Context
