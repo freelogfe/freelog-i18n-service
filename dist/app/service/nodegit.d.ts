@@ -2,12 +2,12 @@
 import { Repository, Signature } from 'nodegit';
 import { PlainObject, INodegitUser, INodegitConfig } from '../../interface/index';
 import { INodegitService, ICheckResult, IRepositoryChanges, IRepository, IReference } from '../../interface/nodegit';
-import { IRepositoryInfoService, IRepositoryInfo } from '../../interface/repositoryInfo';
+import { IRepositoryInfoService, IRepositoryInfo, IRepositoryInfoResult } from '../../interface/repositoryInfo';
 export declare class NodegitService implements INodegitService {
     static cloneStatus: PlainObject;
     nodegitConfig: INodegitConfig;
     riService: IRepositoryInfoService;
-    openRepositoryByName(repositoryName: string): Promise<IRepository>;
+    openRepositoryByName(repositoryName: string): Promise<[IRepository, IRepositoryInfoResult]>;
     checkRepository(repositoryName: string): Promise<ICheckResult>;
     cloneRepository(reposInfo: IRepositoryInfo, userConfig: INodegitUser): Promise<IRepository>;
     createNewBranch(repository: Repository, brName: string): Promise<IReference>;

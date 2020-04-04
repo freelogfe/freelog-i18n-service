@@ -14,7 +14,7 @@ export interface IRepositoryChange {
 }
 export declare type IRepositoryChanges = IRepositoryChange[];
 export interface INodegitService {
-    openRepositoryByName(repositoryName: string): Promise<IRepository>;
+    openRepositoryByName(repositoryName: string): Promise<[IRepository, IRepositoryInfoResult]>;
     checkRepository(targetReposName: string): Promise<ICheckResult>;
     cloneRepository(reposInfo: IRepositoryInfoResult, userConfig: INodegitUser): Promise<IRepository>;
     createNewBranch(repository: Repository, brName: string): Promise<IReference>;

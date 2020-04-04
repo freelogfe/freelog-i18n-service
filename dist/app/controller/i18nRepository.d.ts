@@ -1,8 +1,10 @@
 import { Context } from 'midway';
 import { II18nRepositorySerive } from '../../interface/i18nRepository';
+import { IKeysInfoService } from '../../interface/keysInfo';
 export declare class I18nDataController {
     ctx: Context;
     irSerive: II18nRepositorySerive;
+    kInfoService: IKeysInfoService;
     getAllI18nFileData(): Promise<void>;
     getI18nFileDataByPath(): Promise<void>;
     updateI18nFileData(): Promise<void>;
@@ -10,6 +12,6 @@ export declare class I18nDataController {
     deleteModule(): Promise<void>;
     downloadFile(): Promise<void>;
     checkRepository(): Promise<void>;
-    getRepositoryInfo(): Promise<void>;
-    updateKeyInfo(): Promise<void>;
+    getRepositoryKeysInfo(): Promise<void>;
+    updateRepositoryKeyInfo(): Promise<void>;
 }

@@ -11,6 +11,7 @@ export declare class TrackRepositoriesService implements ITrackedRepositoriesSer
     kiService: IKeysInfoService;
     riService: IRepositoryInfoService;
     ctx: Context;
+    static cacheScanResults: IRepositoryResult[];
     scanAllRepositories(): Promise<IRepositoryResult[]>;
     scanRepository(repositoryName: string): Promise<IRepositoryResult | null>;
     getRepositoryI18nDir(reposInfo: IRepositoryInfo, tragetDirPath: string): IReposDirResult[];
