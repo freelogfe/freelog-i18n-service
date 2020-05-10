@@ -1,6 +1,7 @@
 declare module 'path-to-regexp'
 declare module 'is-type-of'
 declare module 'fs-extra'
+declare module 'egg-freelog-database/lib/database/mongo-base-operation'
 
 declare module 'path' {
   export function normalize(p: string): string

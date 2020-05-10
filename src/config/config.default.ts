@@ -11,6 +11,10 @@ export default (appInfo: EggAppInfo) => {
   config.middleware = [ 'errorHandler' ]
   // add your config here
 
+  config.bodyParser = {
+    enableTypes: ['json', 'form', 'text']
+  }
+
   config.nodegit = {
     user: {
       token: '3c9653aec77ac77203670043bb34b554cffaf1e4',
@@ -34,6 +38,27 @@ export default (appInfo: EggAppInfo) => {
     },
   }
 
+  config.cors = {
+    credentials: true,
+    origin(ctx: Context) {
+      return ctx.request.headers.origin || '*'
+    },
+    exposeHeaders: 'freelog-resource-type,freelog-meta,freelog-system-meta,freelog-sub-dependencies,freelog-entity-nid',
+  }
+
+  config.security = {
+    domainWhiteList: [ '.testfreelog.com' ],
+    csrf: {
+      enable: false,
+      ignoreJSON: true,
+      cookieName: 'csrfToken',
+      refererWhiteList: [ 'http://local.testfreelog.com/' ],
+    }
+  }
+
+  config.mongoose = {
+    url: 'mongodb://39.108.77.211:30772/nodeReportRecord'
+  }
   /**
    * 内部中间件没有处理到的异常,在此处统一处理
    */
