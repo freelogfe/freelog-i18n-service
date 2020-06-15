@@ -14,4 +14,5 @@ export declare class I18nDataController {
     checkRepository(): Promise<void>;
     getRepositoryKeysInfo(): Promise<void>;
     updateRepositoryKeyInfo(): Promise<void>;
+    commitAndPushChanges(): Promise<void>;
 }

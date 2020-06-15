@@ -33,13 +33,13 @@ export class I18nDataController {
     this.ctx.success(result)
   }
 
-  @post('/module/create')
+  @post('/newModule')
   async creaetNewModule(): Promise<void> {
     const result = await this.irSerive.creaetNewModule()
     this.ctx.success(result)
   }
 
-  @del('/module/delete')
+  @del('/module')
   async deleteModule(): Promise<void> {
     const result = await this.irSerive.deleteModule()
     this.ctx.success(result)
@@ -69,5 +69,11 @@ export class I18nDataController {
     const { repositoryName, moduleName, key, keyInfo } = this.ctx.request.body
     await this.kInfoService.updateKeyInfo(repositoryName, moduleName, key, keyInfo)
     this.ctx.success(null)
+  }
+
+  @post('/changes/push')
+  async commitAndPushChanges() {
+    const result = await this.irSerive.commitAndPushChanges()
+    this.ctx.success(result)
   }
 }
