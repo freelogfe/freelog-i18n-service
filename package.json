@@ -44,7 +44,7 @@
     "stop": "egg-scripts stop --title=midway-server-freelog-i18n-service",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "clean": "midway-bin clean",
-    "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts --port=7111",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint && midway-bin test --ts",
     "test-jest": "jest",

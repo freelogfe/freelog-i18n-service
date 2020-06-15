@@ -9,6 +9,6 @@ export class HomeController {
 
   @get('/')
   async index() {
-    this.ctx.body = `Welcome to midwayjs!`
+    this.ctx.body = `Welcome to !`
   }
 }

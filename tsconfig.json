@@ -26,6 +26,7 @@
   "exclude": [
     "app/public",
     "app/views",
+    "i18n-repositories",
     "dist",
     "node_modules*",
     "test",

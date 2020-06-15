@@ -27,12 +27,12 @@ export default (appInfo: EggAppInfo) => {
     trackedRepositories: {
       'freelogfe-web-repos': {
         reposI18nPath: 'packages/@freelog/freelog-i18n/',
-        reposUrl: 'https://github.com/freelogfe/freelogfe-web-repos',
+        reposUrl: 'https://github.com/freelogfe/freelogfe-web-repos.git',
         reposI18nBranch: 'i18n-test'
       },
       'freelog-node-provider': {
         reposI18nPath: 'config/i18n-text/',
-        reposUrl: 'https://github.com/freelogfe/freelog-node-provider',
+        reposUrl: 'https://github.com/freelogfe/freelog-node-provider.git',
         reposI18nBranch: 'i18n-test'
       },
     },
