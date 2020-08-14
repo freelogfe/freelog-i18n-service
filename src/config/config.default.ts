@@ -47,7 +47,7 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.security = {
-    domainWhiteList: [ '.testfreelog.com' ],
+    domainWhiteList: [ '.testfreelog.com', '.freelog.com' ],
     csrf: {
       enable: false,
       ignoreJSON: true,
@@ -57,7 +57,7 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.mongoose = {
-    url: 'mongodb://39.108.77.211:30772/nodeReportRecord'
+    url: 'mongodb://39.108.77.211:30772/i18nRecords'
   }
   /**
    * 内部中间件没有处理到的异常,在此处统一处理

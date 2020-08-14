@@ -2,8 +2,8 @@ import MongoBaseOperation = require('egg-freelog-database/lib/database/mongo-bas
 import { provide, Application } from 'midway'
 
 @provide()
-export default class WebReportRecordProvider extends MongoBaseOperation {
+export default class I18nKeyInfoProvider extends MongoBaseOperation {
   constructor(app: Application) {
-    super(app.model.NodePerformanceReportRecord)
+    super(app.model.KeyInfo)
   }
 }

@@ -57,19 +57,19 @@ export class I18nDataController {
     this.ctx.success(result)
   }
 
-  @get('/keysInfo')
-  async getRepositoryKeysInfo(): Promise<void> {
-    const { repositoryName } = this.ctx.query
-    const result = await this.kInfoService.readKeysInfoFile(repositoryName)
-    this.ctx.success(result)
-  }
+  // @get('/keysInfo')
+  // async getRepositoryKeysInfo(): Promise<void> {
+  //   const { repositoryName } = this.ctx.query
+  //   const result = await this.kInfoService.readKeysInfoFile(repositoryName)
+  //   this.ctx.success(result)
+  // }
 
-  @put('/keyInfo')
-  async updateRepositoryKeyInfo(): Promise<void> {
-    const { repositoryName, moduleName, key, keyInfo } = this.ctx.request.body
-    await this.kInfoService.updateKeyInfo(repositoryName, moduleName, key, keyInfo)
-    this.ctx.success(null)
-  }
+  // @put('/keyInfo')
+  // async updateRepositoryKeyInfo(): Promise<void> {
+  //   const { repositoryName, moduleName, key, keyInfo } = this.ctx.request.body
+  //   await this.kInfoService.updateKeyInfo(repositoryName, moduleName, key, keyInfo)
+  //   this.ctx.success(null)
+  // }
 
   @post('/changes/push')
   async commitAndPushChanges() {
