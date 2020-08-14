@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = (app) => {
+    const mongoose = app.mongoose;
+    const I18nKeyInfoSchema = new mongoose.Schema({
+        name: { type: String },
+        moduleName: { type: String },
+        repositoryName: { type: String },
+        description: { type: String },
+        updateTime: { type: Date, default: Date.now },
+        tags: { type: Array },
+        values: { type: Array },
+    });
+    I18nKeyInfoSchema.index({ updateTime: -1 });
+    return mongoose.model('keyInfo', I18nKeyInfoSchema);
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoia2V5LWluZm8uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwL21vZGVsL2tleS1pbmZvLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQ0Esa0JBQWUsQ0FBQyxHQUFnQixFQUFFLEVBQUU7SUFDbEMsTUFBTSxRQUFRLEdBQUcsR0FBRyxDQUFDLFFBQVEsQ0FBQTtJQUM3QixNQUFNLGlCQUFpQixHQUFHLElBQUksUUFBUSxDQUFDLE1BQU0sQ0FBQztRQUM1QyxJQUFJLEVBQUUsRUFBRSxJQUFJLEVBQUUsTUFBTSxFQUFFO1FBQ3RCLFVBQVUsRUFBRSxFQUFFLElBQUksRUFBRSxNQUFNLEVBQUU7UUFDNUIsY0FBYyxFQUFFLEVBQUUsSUFBSSxFQUFFLE1BQU0sRUFBRTtRQUNoQyxXQUFXLEVBQUUsRUFBRSxJQUFJLEVBQUUsTUFBTSxFQUFFO1FBQzdCLFVBQVUsRUFBRSxFQUFFLElBQUksRUFBRSxJQUFJLEVBQUUsT0FBTyxFQUFFLElBQUksQ0FBQyxHQUFHLEVBQUU7UUFDN0MsSUFBSSxFQUFFLEVBQUUsSUFBSSxFQUFFLEtBQUssRUFBRTtRQUNyQixNQUFNLEVBQUUsRUFBRSxJQUFJLEVBQUUsS0FBSyxFQUFFO0tBQ3hCLENBQUMsQ0FBQTtJQUVGLGlCQUFpQixDQUFDLEtBQUssQ0FBQyxFQUFFLFVBQVUsRUFBRSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUE7SUFDM0MsT0FBTyxRQUFRLENBQUMsS0FBSyxDQUFDLFNBQVMsRUFBRSxpQkFBaUIsQ0FBQyxDQUFBO0FBQ3JELENBQUMsQ0FBQSJ9

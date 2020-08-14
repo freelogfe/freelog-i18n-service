@@ -11,14 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const MongoBaseOperation = require("egg-freelog-database/lib/database/mongo-base-operation");
 const midway_1 = require("midway");
-let WebReportRecordProvider = class WebReportRecordProvider extends MongoBaseOperation {
+let I18nKeyInfoProvider = class I18nKeyInfoProvider extends MongoBaseOperation {
     constructor(app) {
-        super(app.model.NodePerformanceReportRecord);
+        super(app.model.KeyInfo);
     }
 };
-WebReportRecordProvider = __decorate([
+I18nKeyInfoProvider = __decorate([
     midway_1.provide(),
     __metadata("design:paramtypes", [midway_1.Application])
-], WebReportRecordProvider);
-exports.default = WebReportRecordProvider;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibm9kZS1wZXJmb3JtYW5jZS1yZXBvcnQtcmVjb3JkLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2FwcC9kYXRhLXByb3ZpZGVyL25vZGUtcGVyZm9ybWFuY2UtcmVwb3J0LXJlY29yZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBLDZGQUE2RjtBQUM3RixtQ0FBNkM7QUFHN0MsSUFBcUIsdUJBQXVCLEdBQTVDLE1BQXFCLHVCQUF3QixTQUFRLGtCQUFrQjtJQUNyRSxZQUFZLEdBQWdCO1FBQzFCLEtBQUssQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLDJCQUEyQixDQUFDLENBQUE7SUFDOUMsQ0FBQztDQUNGLENBQUE7QUFKb0IsdUJBQXVCO0lBRDNDLGdCQUFPLEVBQUU7cUNBRVMsb0JBQVc7R0FEVCx1QkFBdUIsQ0FJM0M7a0JBSm9CLHVCQUF1QiJ9
+], I18nKeyInfoProvider);
+exports.default = I18nKeyInfoProvider;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoia2V5LWluZm8uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwL2RhdGEtcHJvdmlkZXIva2V5LWluZm8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFBQSw2RkFBNkY7QUFDN0YsbUNBQTZDO0FBRzdDLElBQXFCLG1CQUFtQixHQUF4QyxNQUFxQixtQkFBb0IsU0FBUSxrQkFBa0I7SUFDakUsWUFBWSxHQUFnQjtRQUMxQixLQUFLLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsQ0FBQTtJQUMxQixDQUFDO0NBQ0YsQ0FBQTtBQUpvQixtQkFBbUI7SUFEdkMsZ0JBQU8sRUFBRTtxQ0FFUyxvQkFBVztHQURULG1CQUFtQixDQUl2QztrQkFKb0IsbUJBQW1CIn0=

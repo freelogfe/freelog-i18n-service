@@ -12,7 +12,5 @@ export declare class I18nDataController {
     deleteModule(): Promise<void>;
     downloadFile(): Promise<void>;
     checkRepository(): Promise<void>;
-    getRepositoryKeysInfo(): Promise<void>;
-    updateRepositoryKeyInfo(): Promise<void>;
     commitAndPushChanges(): Promise<void>;
 }
